@@ -4,15 +4,17 @@ lib_c_args += [ '-Werror', '-march=native', ]
 
 sources = [ 'dnsSock.c', ]
 
-dnsSpoofer_cflags = run_command('pkg-config', '--static', '--cflags', 'libDnsSpoofer')
-if dnsSpoofer_cflags.returncode() != 0
-	error('failed to get DNS Spoofer libraries, please build and install!')
-endif
+dnsSpoofer_dep = dependency('threads', required : true)
 
-lib_c_args += [dnsSpoofer_cflags.stdout().strip().split()]
+#dnsSpoofer_cflags = run_command('pkg-config', '--static', '--cflags', 'libDnsSpoofer')
+#if dnsSpoofer_cflags.returncode() != 0
+#       error('failed to get DNS Spoofer libraries, please build and install!')
+#endif
+#lib_c_args += [dnsSpoofer_cflags.stdout().strip().split()]
 
-#dnsSpoofer_linkargs = ['/usr/local/lib/x86_64-linux-gnu/libDnsSpoofer.so', ]
-#add_project_link_arguments(dnsSpoofer_linkargs, language: 'c')
+dnsSpoofer_linkargs = ['/usr/local/lib/x86_64-linux-gnu/libDnsSpoofer.so', ]
+add_project_link_arguments(dnsSpoofer_linkargs, language: 'c')
+
 
 #build executable
 executable(
@@ -20,6 +22,6 @@ executable(
 		sources,
 		c_args : lib_c_args,
 		include_directories : include_dir,
-		dependencies: [],
+		dependencies: [dnsSpoofer_dep],
 		install: false)
 

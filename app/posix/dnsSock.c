@@ -1,3 +1,5 @@
+#include "dnsSpoof.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,13 +12,20 @@ uint16_t dnsPort = 53;
 void usage (void)
 {
 	fprintf(stdout, "INFO: ----------- DNS SPOOFER -----------\n");
-	fprintf(stdout, "INFO: ./ dnsSpoofer			- default DNS port 53\n");
+	fprintf(stdout, "INFO: ./ dnsSpoofer		- default DNS port 53\n");
 	fprintf(stdout, "INFO: ./ dnsSpoofer [dns port]	- run with user defined dns port\n");
 	fprintf(stdout, "INFO: ----------- ----------- -----------\n");
 }
 
+int SocketSetup(void)
+{
+	return 0;
+}
+
+
 int main (int argc, char *argv[])
 {
+	/* Application setup */
 	fprintf(stdout, "DEBUG: args\n");
 	for (int i = 0; i < argc; i++)
 		fprintf(stdout, "DEBUG: argv[%d] - (%s)\n", i, argv[i]);
@@ -28,25 +37,18 @@ int main (int argc, char *argv[])
 		return -1;
 	}
 
-	/* check if dns port number is within bounds */
-	if ((NULL == argv[1]) || (strlen(argv[1]) > 4) || (strlen(argv[1]) == 0)) {
-		fprintf(stderr, "ERR: dns port arguemnt is incorrect!\n\n");
-		return -2;
+	if (argc ==2) {
+		/* check if dns port number is within bounds */
+		dnsPort = portCheck(argv[1], strlen(argv[1]));
+		fprintf(stdout, "DEBUG: DNS port %u\n", dnsPort);
 	}
 
-	char *digit = argv[1];
-	size_t len = strlen(argv[1]);
-
-	for (int i = 0; i < len; i++, digit+= 1)
-	{
-		if (!isdigit(*digit)) {
-			fprintf(stderr, "ERR: dns port arguemnt is not uint16_t digits!\n\n");
-			return -3;
-		}
+	/* Socket setup */
+	int ret = SocketSetup();
+	if (0 == ret) {
+		fprintf(stderr, "ERR: Soc ket setup failed!\n\n");
+		return -4;
 	}
-
-	dnsPort = atoi(argv[1]);
-	fprintf(stdout, "DEBUG: DNS port %u\n", dnsPort);
 
 	return 0;
 }
