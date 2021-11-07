@@ -1,0 +1,1 @@
+option('app', type: 'string', value: 'posix', description: 'build applciation in posix|dpdk|ebpf mode, default mode is posix')
