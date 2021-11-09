@@ -16,3 +16,31 @@
  - run application `./build/ebpf/dnsSpoofer`
 
 note: default app is `posix` build.
+
+
+# possible optimization
+
+## POSIX
+ - use RSS to spread across multiple RX queues
+ - use RFS to send to multiple socket
+ - remove recvfrom and sendto and change `epoll | event driven`
+ - use SIMD for copy and compare
+
+## DPDK
+ - Use 
+	1. HW RSS to spread the UDP request to multiple queues
+	2. PTYPES to identify if it UDP and IPv4 non fragment
+ - else
+	1. Use 2 queues, Q0 for all non match traffjc
+	2. Use Q1 for RTE_FLOW Match traffic
+	3. Check with PTYPE for IPv4 for non fragment.
+ - use DNS APIs to check the content
+ - prepare the response on the same buffer 
+ - send the reply back to same interface.
+ 
+## EBPF (best approach)
+ - use XDP to intercept the traffic in driver layer
+ - check packet type for IPv4, non fragment, UDP, port check.
+ - any packets not matching, send it to kernel via XDP_PASS
+ - edit the buffer for DNS reply
+ - send the packet XDP_TX
