@@ -1,0 +1,18 @@
+# build & run
+
+## POSIX
+ - posix socket `meson build -Dapp=posix`
+ - `ninja -C build`
+ - run application `./build/posix/dnsSpoofer`
+
+## DPDK
+ - dpdk `meson build -Dapp=dpdk`
+ - `ninja -C build`
+ - run application `./build/dpdk/dnsSpoofer`
+
+## eBPF
+ - ebpf `meson build -Dapp=ebpf`
+ - `ninja -C build`
+ - run application `./build/ebpf/dnsSpoofer`
+
+note: default app is `posix` build.
