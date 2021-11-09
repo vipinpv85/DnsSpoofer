@@ -50,12 +50,14 @@ uint16_t ChangeFromDnsName (unsigned char* dnsName, unsigned char *urlName)
 
 		dnsPos += 1;
 		memcpy(&urlName[urlPos], &dnsName[dnsPos], subStringLen);
-		urlPos += subStringLen + 1;
-		urlName[urlPos - 1] = '.';
+		urlPos += subStringLen;
+		urlName[urlPos] = '.';
+		urlPos += 1;
 		urlName[urlPos] = '\0';
 
 		dnsPos += subStringLen;
 	} while (false == dnsEndOfText);
+	urlName[urlPos - 1] = '\0';
 
 	fprintf(stdout, "DEBUG: URL NAME: (%s)\n", urlName);
 	return dnsPos;
