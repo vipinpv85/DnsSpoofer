@@ -43,5 +43,6 @@ typedef struct dnsHeader_s
 
 
 uint16_t portCheck(char *dnsPort, size_t dnsPortLen);
+uint16_t ChangeFromDnsName(unsigned char* dnsName, unsigned char *urlName);
 
 #endif

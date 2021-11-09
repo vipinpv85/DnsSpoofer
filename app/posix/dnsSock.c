@@ -53,17 +53,13 @@ int SocketSetup(void)
 
 		fprintf(stdout, "INFO: listening on socket - (%s-%d)\n", DNS_SPOOF_IP, dnsPort);
 	do {
-		unsigned char buffer[BUFFERSIZE] = {'\0'};
+		unsigned char buffer[BUFFERSIZE] = {0};
+
 		struct sockaddr Client = {0};
 		size = sizeof(Client);
 
 		int ret = recvfrom(s, buffer, BUFFERSIZE, 0, (struct sockaddr*)&Client, &size);
 		buffer[ret] = '\0'; 
-		for (int i = 0; i < ret; i++)
-		{
-			fprintf(stdout, "%c ", buffer[i]);
-		}
-
 
 		dnsHeader_t *dnsPtr = (dnsHeader_t *)buffer;
 		fprintf(stdout, "\n--------------\n");
@@ -81,8 +77,17 @@ int SocketSetup(void)
 
 		if (0 == dnsPtr->qr) {
 			unsigned char *queryName = &buffer[sizeof(dnsHeader_t)];
-			fprintf(stdout, "data: (%s) \n", queryName);
+			fprintf(stdout, "\n--------------\n");
+			for (int i = 0; i < ntohs(dnsPtr->q_count); i++)
+			{
+				unsigned char url[512];
+				fprintf(stdout, "query data: (%s) \n", queryName);
+				ChangeFromDnsName(queryName, url);
+			}
 		}
+
+		for (int i = sizeof(dnsHeader_t); i < (ret - sizeof(dnsHeader_t)); i++)
+			fprintf(stdout, "0x%2x ", buffer[i]);
 	} while(1);
 
 
