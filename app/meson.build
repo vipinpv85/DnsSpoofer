@@ -16,3 +16,5 @@ elif get_option('app') == 'ebpf'
 else
 	error('Application mode is unknown, please use "posix|dpdk|ebpf" mode!')
 endif
+
+subdir('test')
