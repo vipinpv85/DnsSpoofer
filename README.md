@@ -1,5 +1,6 @@
 # DnsSpoofer
 DNS spoofing daemon for Linux that listens on the DNS port for any A record request (e.g. foo.com) returns a fixed, hard coded address.
+The is intented to be DNS cache server only and for vlaidating and authorizing server.
 
 ## Target to Achieve:
  - Linux pthread daemon
@@ -20,4 +21,5 @@ DNS spoofing daemon for Linux that listens on the DNS port for any A record requ
   - comments
   - unit tests
   - reference to online or PDF material in use
- 
+
+Note: DNS non authorative request are processed as DNS cache server.

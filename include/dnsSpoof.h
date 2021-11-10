@@ -4,6 +4,10 @@
 #include <inttypes.h>
 #include <stddef.h>
 
+#ifdef __cplusplus
+ extern "C" {
+ #endif
+
 /* from https://datatracker.ietf.org/doc/html/rfc1035 section 4.1.1 */
 
 
@@ -109,7 +113,32 @@ typedef struct dnsResponse_s
 	unsigned short data_len;
 } __attribute__((packed)) dnsResponse_t;
 
+/**
+ * Check DNS port shared from the user. it coverts user input into UDP port.
+ * 
+ * @return return uint16_t UDP port. for invalid it return 0
+ *
+ * @param dnsPort
+ * The *dnsPort* pointer is the address of the DNS port string.
+ * @param dnsPortLen
+ * The *dnsPortLen* is the size of dnsPort.
+ */
 int portCheck(char *dnsPort, size_t dnsPortLen);
+
+/**
+ * converts given DNS name into actual string. 
+ *
+ * return 0 for invalid and actual position from DNS name
+ *
+ * @param dnsName
+ * The *dnsName* input shared to convert
+ * @param urlName
+ * The *urlName* converted from dnsName
+ */
 int ChangeFromDnsName(unsigned char* dnsName, unsigned char *urlName);
+
+ #ifdef __cplusplus
+ }
+ #endif
 
 #endif
