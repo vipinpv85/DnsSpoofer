@@ -109,7 +109,7 @@ typedef struct dnsResponse_s
 	unsigned short data_len;
 } __attribute__((packed)) dnsResponse_t;
 
-uint16_t portCheck(char *dnsPort, size_t dnsPortLen);
-uint16_t ChangeFromDnsName(unsigned char* dnsName, unsigned char *urlName);
+int portCheck(char *dnsPort, size_t dnsPortLen);
+int ChangeFromDnsName(unsigned char* dnsName, unsigned char *urlName);
 
 #endif

@@ -1,6 +1,6 @@
 #include "dnsSpoofer_common.h"
 
-uint16_t portCheck(char *dnsPort, size_t dnsPortLen)
+int portCheck(char *dnsPort, size_t dnsPortLen)
 {
         /* check if dns port number is within bounds */
         if ((NULL == dnsPort) || (dnsPortLen > 4) || (dnsPortLen == 0)) {
@@ -33,11 +33,13 @@ void ChangeToDnsName (unsigned char *urlName, unsigned char* dnsName)
 	fprintf(stdout, "DEBUG: DNS NAME: (%s)\n", dnsName);
 }
 
-uint16_t ChangeFromDnsName (unsigned char* dnsName, unsigned char *urlName)
+int ChangeFromDnsName (unsigned char* dnsName, unsigned char *urlName)
 {
-	assert((urlName != NULL) && (dnsName != NULL));
+	if ((urlName == NULL) || (dnsName == NULL))
+		return -1;
+
 	bool dnsEndOfText = false; /* stop at 0 */
-	uint16_t dnsPos = 0, urlPos = 0;
+	uint16_t dnsPos = 0, urlPos = 0, dnsLen = strlen(dnsName);
 
 	fprintf(stdout, "DEBUG: DNS NAME: (%s)\n", dnsName);
 
@@ -46,7 +48,7 @@ uint16_t ChangeFromDnsName (unsigned char* dnsName, unsigned char *urlName)
 			dnsEndOfText = true;
 			continue;
 		}
-		uint8_t subStringLen = dnsName[dnsPos] & 0xff;
+		uint8_t subStringLen = (dnsName[dnsPos] & 0xff) - '0';
 
 		dnsPos += 1;
 		memcpy(&urlName[urlPos], &dnsName[dnsPos], subStringLen);
@@ -56,9 +58,9 @@ uint16_t ChangeFromDnsName (unsigned char* dnsName, unsigned char *urlName)
 		urlName[urlPos] = '\0';
 
 		dnsPos += subStringLen;
-	} while (false == dnsEndOfText);
+	} while ((false == dnsEndOfText) || (dnsPos < dnsLen));
 	urlName[urlPos - 1] = '\0';
 
 	fprintf(stdout, "DEBUG: URL NAME: (%s)\n", urlName);
-	return dnsPos;
+	return ((dnsLen - dnsPos) == 0) ? dnsPos : 0;
 } 
