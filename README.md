@@ -11,8 +11,7 @@ The is intented to be DNS cache server only and for vlaidating and authorizing s
 ## Assumptions:
   - Runs for IPv4 only.
   - does not uses encrypted TLS or SSL.
-  - Should only intercept `foo.com`.
-  - Bypasses for other requests
+  - Bypasses for other requests authoriative and zone requests
   - If the DNS response is received drop the same.
   - Periodic stats (optional)
 
